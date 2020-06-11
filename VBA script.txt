@@ -1,0 +1,78 @@
+Sub VBA_HW()
+Dim Ticker As String
+Dim Loop_Row1 As Double
+Dim Loop_Row2 As Double
+Dim Loop_Row3 As Double
+Dim Row_Number As Double
+Dim Year_Change As Double
+Dim Row_price As Double
+Dim Total As Double
+Dim Row_Volume As Double
+
+
+Row_Number = Cells(Rows.Count, 1).End(xlUp).Row
+Row_Number2 = Cells(Rows.Count, 10).End(xlUp).Row
+
+Loop_Row1 = 2
+Loop_Row2 = 2
+Loop_Row3 = 2
+Row_price = 2
+Row_Volume = 2
+
+
+'Ticker
+For i = 2 To Row_Number
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+    Ticker = Cells(i, 1).Value
+    Cells(Loop_Row1, 9) = Ticker
+    
+    Loop_Row1 = Loop_Row1 + 1
+    End If
+    Next i
+    
+'Year Change and Percentage
+For i = 2 To Row_Number
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+        If Cells(Row_price, 3) <> 0 Then
+        
+            Year_Change = Cells(i, 6) - Cells(Row_price, 3)
+            Cells(Loop_Row2, 10) = Year_Change
+            Cells(Loop_Row2, 11) = Year_Change / Cells(Row_price, 3)
+        Else
+            Cells(Loop_Row2, 11) = 0
+        End If
+        
+    Row_price = i + 1
+    Loop_Row2 = Loop_Row2 + 1
+    End If
+    Next i
+    
+'Total Stock Volume
+For i = 2 To Row_Number
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+    For j = Row_Volume To i
+        
+    Total = Total + Cells(j, 7)
+    
+    Next j
+    Cells(Loop_Row3, 12) = Total
+    Total = 0
+    Row_Volume = i + 1
+    Loop_Row3 = Loop_Row3 + 1
+    
+    End If
+    Next i
+
+'Colouring
+For i = 2 To Row_Number2
+    If Cells(i, 10).Value > 0 Then
+        Cells(i, 10).Interior.ColorIndex = 4
+    ElseIf Cells(i, 10).Value < 0 Then
+        Cells(i, 10).Interior.ColorIndex = 3
+    End If
+    Next i
+    
+
+    
+
+End Sub
